@@ -18,7 +18,7 @@ fi
 
 echo "==> Installing app dependencies"
 cd "$APP_DIR"
-npm ci --omit=dev || npm install
+npm install
 
 if [ ! -f "$APP_DIR/.env" ]; then
   cp "$APP_DIR/.env.example" "$APP_DIR/.env"
