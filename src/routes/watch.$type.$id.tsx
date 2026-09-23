@@ -97,6 +97,13 @@ function Watch() {
     };
   }, []);
 
+  // If nothing has started after a while, offer a retry instead of a black screen.
+  useEffect(() => {
+    setStalled(false);
+    const timer = window.setTimeout(() => setStalled(true), 30000);
+    return () => window.clearTimeout(timer);
+  }, [src, attempt]);
+
   const nextEpisode = () => {
     void navigate({ to: "/watch/$type/$id", params: { type, id }, search: { s, e: e + 1 } });
   };
