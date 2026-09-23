@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as MoviesRouteImport } from './routes/movies'
 import { Route as MyListRouteImport } from './routes/my-list'
 import { Route as PeacockRouteImport } from './routes/peacock'
+import { Route as RemoteRouteImport } from './routes/remote'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as MovieIdRouteImport } from './routes/movie.$id'
 import { Route as ShowIdRouteImport } from './routes/show.$id'
@@ -41,9 +43,19 @@ const PeacockRoute = PeacockRouteImport.update({
   path: '/peacock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RemoteRoute = RemoteRouteImport.update({
+  id: '/remote',
+  path: '/remote',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShowsRoute = ShowsRouteImport.update({
@@ -82,7 +94,9 @@ export interface FileRoutesByFullPath {
   '/movies': typeof MoviesRoute
   '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
   '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
@@ -95,7 +109,9 @@ export interface FileRoutesByTo {
   '/movies': typeof MoviesRoute
   '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
   '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
@@ -109,7 +125,9 @@ export interface FileRoutesById {
   '/movies': typeof MoviesRoute
   '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
   '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
@@ -124,7 +142,9 @@ export interface FileRouteTypes {
     | '/movies'
     | '/my-list'
     | '/peacock'
+    | '/remote'
     | '/search'
+    | '/settings'
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
@@ -137,7 +157,9 @@ export interface FileRouteTypes {
     | '/movies'
     | '/my-list'
     | '/peacock'
+    | '/remote'
     | '/search'
+    | '/settings'
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
@@ -150,7 +172,9 @@ export interface FileRouteTypes {
     | '/movies'
     | '/my-list'
     | '/peacock'
+    | '/remote'
     | '/search'
+    | '/settings'
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
@@ -164,7 +188,9 @@ export interface RootRouteChildren {
   MoviesRoute: typeof MoviesRoute
   MyListRoute: typeof MyListRoute
   PeacockRoute: typeof PeacockRoute
+  RemoteRoute: typeof RemoteRoute
   SearchRoute: typeof SearchRoute
+  SettingsRoute: typeof SettingsRoute
   ShowsRoute: typeof ShowsRoute
   MovieIdRoute: typeof MovieIdRoute
   ShowIdRoute: typeof ShowIdRoute
@@ -203,11 +229,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PeacockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/remote': {
+      id: '/remote'
+      path: '/remote'
+      fullPath: '/remote'
+      preLoaderRoute: typeof RemoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shows': {
@@ -260,7 +300,9 @@ const rootRouteChildren: RootRouteChildren = {
   MoviesRoute: MoviesRoute,
   MyListRoute: MyListRoute,
   PeacockRoute: PeacockRoute,
+  RemoteRoute: RemoteRoute,
   SearchRoute: SearchRoute,
+  SettingsRoute: SettingsRoute,
   ShowsRoute: ShowsRoute,
   MovieIdRoute: MovieIdRoute,
   ShowIdRoute: ShowIdRoute,
