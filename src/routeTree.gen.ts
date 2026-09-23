@@ -17,6 +17,8 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as MovieIdRouteImport } from './routes/movie.$id'
 import { Route as ShowIdRouteImport } from './routes/show.$id'
+import { Route as YoutubeIndexRouteImport } from './routes/youtube.index'
+import { Route as YoutubeVideoIdRouteImport } from './routes/youtube.$videoId'
 import { Route as WatchTypeIdRouteImport } from './routes/watch.$type.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +61,16 @@ const ShowIdRoute = ShowIdRouteImport.update({
   path: '/show/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const YoutubeIndexRoute = YoutubeIndexRouteImport.update({
+  id: '/youtube/',
+  path: '/youtube/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const YoutubeVideoIdRoute = YoutubeVideoIdRouteImport.update({
+  id: '/youtube/$videoId',
+  path: '/youtube/$videoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WatchTypeIdRoute = WatchTypeIdRouteImport.update({
   id: '/watch/$type/$id',
   path: '/watch/$type/$id',
@@ -74,6 +86,8 @@ export interface FileRoutesByFullPath {
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube/': typeof YoutubeIndexRoute
   '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +99,8 @@ export interface FileRoutesByTo {
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube': typeof YoutubeIndexRoute
   '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRoutesById {
@@ -97,6 +113,8 @@ export interface FileRoutesById {
   '/shows': typeof ShowsRoute
   '/movie/$id': typeof MovieIdRoute
   '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube/': typeof YoutubeIndexRoute
   '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +128,8 @@ export interface FileRouteTypes {
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube/'
     | '/watch/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +141,8 @@ export interface FileRouteTypes {
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube'
     | '/watch/$type/$id'
   id:
     | '__root__'
@@ -132,6 +154,8 @@ export interface FileRouteTypes {
     | '/shows'
     | '/movie/$id'
     | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube/'
     | '/watch/$type/$id'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +168,8 @@ export interface RootRouteChildren {
   ShowsRoute: typeof ShowsRoute
   MovieIdRoute: typeof MovieIdRoute
   ShowIdRoute: typeof ShowIdRoute
+  YoutubeVideoIdRoute: typeof YoutubeVideoIdRoute
+  YoutubeIndexRoute: typeof YoutubeIndexRoute
   WatchTypeIdRoute: typeof WatchTypeIdRoute
 }
 
@@ -205,6 +231,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/youtube/': {
+      id: '/youtube/'
+      path: '/youtube'
+      fullPath: '/youtube/'
+      preLoaderRoute: typeof YoutubeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/youtube/$videoId': {
+      id: '/youtube/$videoId'
+      path: '/youtube/$videoId'
+      fullPath: '/youtube/$videoId'
+      preLoaderRoute: typeof YoutubeVideoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/watch/$type/$id': {
       id: '/watch/$type/$id'
       path: '/watch/$type/$id'
@@ -224,6 +264,8 @@ const rootRouteChildren: RootRouteChildren = {
   ShowsRoute: ShowsRoute,
   MovieIdRoute: MovieIdRoute,
   ShowIdRoute: ShowIdRoute,
+  YoutubeVideoIdRoute: YoutubeVideoIdRoute,
+  YoutubeIndexRoute: YoutubeIndexRoute,
   WatchTypeIdRoute: WatchTypeIdRoute,
 }
 export const routeTree = rootRouteImport
