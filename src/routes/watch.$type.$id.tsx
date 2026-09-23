@@ -29,6 +29,8 @@ function Watch() {
   const { s, e } = Route.useSearch();
   const navigate = useNavigate();
   const [chromeVisible, setChromeVisible] = useState(true);
+  const [attempt, setAttempt] = useState(0);
+  const [stalled, setStalled] = useState(false);
   const isTv = type === "tv";
 
   const { data: title } = useQuery({
