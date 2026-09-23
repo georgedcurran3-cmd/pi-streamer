@@ -315,14 +315,23 @@ export const searchAll = createServerFn({ method: "GET" })
     }
   });
 
+export type YtVideo = {
+  id: string;
+  title: string;
+  channel: string;
+  thumb: string;
+  published: string;
+};
+
 /** YouTube search. Uses the official Data API when a key is configured. */
 export const searchYouTube = createServerFn({ method: "GET" })
   .inputValidator((input: { query: string }) => input)
   .handler(async ({ data }) => {
     const key = process.env["YOUTUBE_API_KEY"];
-    if (!key) return { ok: false as const, reason: "YOUTUBE_API_KEY_MISSING", videos: [] };
+    if (!key)
+      return { ok: false as const, reason: "YOUTUBE_API_KEY_MISSING", videos: [] as YtVideo[] };
     const q = data.query.trim();
-    if (!q) return { ok: true as const, videos: [] };
+    if (!q) return { ok: true as const, videos: [] as YtVideo[] };
 
     try {
       const params = new URLSearchParams({
@@ -343,20 +352,21 @@ export const searchYouTube = createServerFn({ method: "GET" })
           channel: i.snippet.channelTitle as string,
           thumb: (i.snippet.thumbnails?.high?.url ?? i.snippet.thumbnails?.medium?.url) as string,
           published: i.snippet.publishedAt as string,
-        })),
+        })) as YtVideo[],
       };
     } catch (error) {
       return {
         ok: false as const,
         reason: error instanceof Error ? error.message : "YOUTUBE_ERROR",
-        videos: [] as { id: string; title: string; channel: string; thumb: string; published: string }[],
+        videos: [] as YtVideo[],
       };
     }
   });
 
 export const getYouTubeTrending = createServerFn({ method: "GET" }).handler(async () => {
   const key = process.env["YOUTUBE_API_KEY"];
-  if (!key) return { ok: false as const, reason: "YOUTUBE_API_KEY_MISSING", videos: [] };
+  if (!key)
+    return { ok: false as const, reason: "YOUTUBE_API_KEY_MISSING", videos: [] as YtVideo[] };
   try {
     const params = new URLSearchParams({
       part: "snippet",
@@ -376,13 +386,13 @@ export const getYouTubeTrending = createServerFn({ method: "GET" }).handler(asyn
         channel: i.snippet.channelTitle as string,
         thumb: (i.snippet.thumbnails?.high?.url ?? i.snippet.thumbnails?.medium?.url) as string,
         published: i.snippet.publishedAt as string,
-      })),
+      })) as YtVideo[],
     };
   } catch (error) {
     return {
       ok: false as const,
       reason: error instanceof Error ? error.message : "YOUTUBE_ERROR",
-      videos: [] as { id: string; title: string; channel: string; thumb: string; published: string }[],
+      videos: [] as YtVideo[],
     };
   }
 });
