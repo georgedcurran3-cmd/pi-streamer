@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MoviesRouteImport } from './routes/movies'
+import { Route as MyListRouteImport } from './routes/my-list'
 import { Route as PeacockRouteImport } from './routes/peacock'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as ShowsRouteImport } from './routes/shows'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,9 +26,19 @@ const MoviesRoute = MoviesRouteImport.update({
   path: '/movies',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyListRoute = MyListRouteImport.update({
+  id: '/my-list',
+  path: '/my-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PeacockRoute = PeacockRouteImport.update({
   id: '/peacock',
   path: '/peacock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShowsRoute = ShowsRouteImport.update({
@@ -38,34 +50,49 @@ const ShowsRoute = ShowsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/search': typeof SearchRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/search': typeof SearchRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
   '/peacock': typeof PeacockRoute
+  '/search': typeof SearchRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/movies' | '/peacock' | '/shows'
+  fullPaths: '/' | '/movies' | '/my-list' | '/peacock' | '/search' | '/shows'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/movies' | '/peacock' | '/shows'
-  id: '__root__' | '/' | '/movies' | '/peacock' | '/shows'
+  to: '/' | '/movies' | '/my-list' | '/peacock' | '/search' | '/shows'
+  id:
+    | '__root__'
+    | '/'
+    | '/movies'
+    | '/my-list'
+    | '/peacock'
+    | '/search'
+    | '/shows'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MoviesRoute: typeof MoviesRoute
+  MyListRoute: typeof MyListRoute
   PeacockRoute: typeof PeacockRoute
+  SearchRoute: typeof SearchRoute
   ShowsRoute: typeof ShowsRoute
 }
 
@@ -85,11 +112,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoviesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my-list': {
+      id: '/my-list'
+      path: '/my-list'
+      fullPath: '/my-list'
+      preLoaderRoute: typeof MyListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/peacock': {
       id: '/peacock'
       path: '/peacock'
       fullPath: '/peacock'
       preLoaderRoute: typeof PeacockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shows': {
@@ -105,7 +146,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MoviesRoute: MoviesRoute,
+  MyListRoute: MyListRoute,
   PeacockRoute: PeacockRoute,
+  SearchRoute: SearchRoute,
   ShowsRoute: ShowsRoute,
 }
 export const routeTree = rootRouteImport
