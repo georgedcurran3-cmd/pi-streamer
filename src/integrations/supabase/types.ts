@@ -14,7 +14,141 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      device_settings: {
+        Row: {
+          code: string
+          settings: Json
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          settings?: Json
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          settings?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      my_list: {
+        Row: {
+          backdrop: string | null
+          code: string
+          created_at: string
+          id: string
+          item_key: string
+          media_type: string
+          poster: string | null
+          title: string
+          tmdb_id: number | null
+          video_id: string | null
+        }
+        Insert: {
+          backdrop?: string | null
+          code: string
+          created_at?: string
+          id?: string
+          item_key: string
+          media_type: string
+          poster?: string | null
+          title: string
+          tmdb_id?: number | null
+          video_id?: string | null
+        }
+        Update: {
+          backdrop?: string | null
+          code?: string
+          created_at?: string
+          id?: string
+          item_key?: string
+          media_type?: string
+          poster?: string | null
+          title?: string
+          tmdb_id?: number | null
+          video_id?: string | null
+        }
+        Relationships: []
+      }
+      pairings: {
+        Row: {
+          code: string
+          created_at: string
+          device_name: string
+          last_seen: string
+          remote_name: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          device_name?: string
+          last_seen?: string
+          remote_name?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          device_name?: string
+          last_seen?: string
+          remote_name?: string | null
+        }
+        Relationships: []
+      }
+      watch_progress: {
+        Row: {
+          backdrop: string | null
+          code: string
+          duration_seconds: number
+          episode: number | null
+          id: string
+          item_key: string
+          media_type: string
+          position_seconds: number
+          poster: string | null
+          season: number | null
+          subtitle: string | null
+          title: string
+          tmdb_id: number | null
+          updated_at: string
+          video_id: string | null
+        }
+        Insert: {
+          backdrop?: string | null
+          code: string
+          duration_seconds?: number
+          episode?: number | null
+          id?: string
+          item_key: string
+          media_type: string
+          position_seconds?: number
+          poster?: string | null
+          season?: number | null
+          subtitle?: string | null
+          title: string
+          tmdb_id?: number | null
+          updated_at?: string
+          video_id?: string | null
+        }
+        Update: {
+          backdrop?: string | null
+          code?: string
+          duration_seconds?: number
+          episode?: number | null
+          id?: string
+          item_key?: string
+          media_type?: string
+          position_seconds?: number
+          poster?: string | null
+          season?: number | null
+          subtitle?: string | null
+          title?: string
+          tmdb_id?: number | null
+          updated_at?: string
+          video_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
