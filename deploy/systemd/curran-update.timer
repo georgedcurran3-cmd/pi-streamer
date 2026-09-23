@@ -1,0 +1,10 @@
+[Unit]
+Description=Check GitHub for Curran TV updates every 5 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=5min
+Unit=curran-update.service
+
+[Install]
+WantedBy=timers.target

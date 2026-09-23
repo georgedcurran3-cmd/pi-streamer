@@ -1,0 +1,17 @@
+[Unit]
+Description=Curran TV media centre
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__APP_DIR__
+EnvironmentFile=__APP_DIR__/.env
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=5
+MemoryMax=420M
+
+[Install]
+WantedBy=multi-user.target

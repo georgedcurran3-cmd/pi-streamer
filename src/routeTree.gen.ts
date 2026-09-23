@@ -10,33 +10,193 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MoviesRouteImport } from './routes/movies'
+import { Route as MyListRouteImport } from './routes/my-list'
+import { Route as PeacockRouteImport } from './routes/peacock'
+import { Route as RemoteRouteImport } from './routes/remote'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShowsRouteImport } from './routes/shows'
+import { Route as MovieIdRouteImport } from './routes/movie.$id'
+import { Route as ShowIdRouteImport } from './routes/show.$id'
+import { Route as YoutubeIndexRouteImport } from './routes/youtube.index'
+import { Route as YoutubeVideoIdRouteImport } from './routes/youtube.$videoId'
+import { Route as WatchTypeIdRouteImport } from './routes/watch.$type.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MoviesRoute = MoviesRouteImport.update({
+  id: '/movies',
+  path: '/movies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyListRoute = MyListRouteImport.update({
+  id: '/my-list',
+  path: '/my-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PeacockRoute = PeacockRouteImport.update({
+  id: '/peacock',
+  path: '/peacock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemoteRoute = RemoteRouteImport.update({
+  id: '/remote',
+  path: '/remote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShowsRoute = ShowsRouteImport.update({
+  id: '/shows',
+  path: '/shows',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MovieIdRoute = MovieIdRouteImport.update({
+  id: '/movie/$id',
+  path: '/movie/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShowIdRoute = ShowIdRouteImport.update({
+  id: '/show/$id',
+  path: '/show/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const YoutubeIndexRoute = YoutubeIndexRouteImport.update({
+  id: '/youtube/',
+  path: '/youtube/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const YoutubeVideoIdRoute = YoutubeVideoIdRouteImport.update({
+  id: '/youtube/$videoId',
+  path: '/youtube/$videoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WatchTypeIdRoute = WatchTypeIdRouteImport.update({
+  id: '/watch/$type/$id',
+  path: '/watch/$type/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
+  '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shows': typeof ShowsRoute
+  '/movie/$id': typeof MovieIdRoute
+  '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube/': typeof YoutubeIndexRoute
+  '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
+  '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shows': typeof ShowsRoute
+  '/movie/$id': typeof MovieIdRoute
+  '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube': typeof YoutubeIndexRoute
+  '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/movies': typeof MoviesRoute
+  '/my-list': typeof MyListRoute
+  '/peacock': typeof PeacockRoute
+  '/remote': typeof RemoteRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/shows': typeof ShowsRoute
+  '/movie/$id': typeof MovieIdRoute
+  '/show/$id': typeof ShowIdRoute
+  '/youtube/$videoId': typeof YoutubeVideoIdRoute
+  '/youtube/': typeof YoutubeIndexRoute
+  '/watch/$type/$id': typeof WatchTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/movies'
+    | '/my-list'
+    | '/peacock'
+    | '/remote'
+    | '/search'
+    | '/settings'
+    | '/shows'
+    | '/movie/$id'
+    | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube/'
+    | '/watch/$type/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/movies'
+    | '/my-list'
+    | '/peacock'
+    | '/remote'
+    | '/search'
+    | '/settings'
+    | '/shows'
+    | '/movie/$id'
+    | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube'
+    | '/watch/$type/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/movies'
+    | '/my-list'
+    | '/peacock'
+    | '/remote'
+    | '/search'
+    | '/settings'
+    | '/shows'
+    | '/movie/$id'
+    | '/show/$id'
+    | '/youtube/$videoId'
+    | '/youtube/'
+    | '/watch/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MoviesRoute: typeof MoviesRoute
+  MyListRoute: typeof MyListRoute
+  PeacockRoute: typeof PeacockRoute
+  RemoteRoute: typeof RemoteRoute
+  SearchRoute: typeof SearchRoute
+  SettingsRoute: typeof SettingsRoute
+  ShowsRoute: typeof ShowsRoute
+  MovieIdRoute: typeof MovieIdRoute
+  ShowIdRoute: typeof ShowIdRoute
+  YoutubeVideoIdRoute: typeof YoutubeVideoIdRoute
+  YoutubeIndexRoute: typeof YoutubeIndexRoute
+  WatchTypeIdRoute: typeof WatchTypeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +208,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/movies': {
+      id: '/movies'
+      path: '/movies'
+      fullPath: '/movies'
+      preLoaderRoute: typeof MoviesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-list': {
+      id: '/my-list'
+      path: '/my-list'
+      fullPath: '/my-list'
+      preLoaderRoute: typeof MyListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/peacock': {
+      id: '/peacock'
+      path: '/peacock'
+      fullPath: '/peacock'
+      preLoaderRoute: typeof PeacockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remote': {
+      id: '/remote'
+      path: '/remote'
+      fullPath: '/remote'
+      preLoaderRoute: typeof RemoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shows': {
+      id: '/shows'
+      path: '/shows'
+      fullPath: '/shows'
+      preLoaderRoute: typeof ShowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/movie/$id': {
+      id: '/movie/$id'
+      path: '/movie/$id'
+      fullPath: '/movie/$id'
+      preLoaderRoute: typeof MovieIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/show/$id': {
+      id: '/show/$id'
+      path: '/show/$id'
+      fullPath: '/show/$id'
+      preLoaderRoute: typeof ShowIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/youtube/': {
+      id: '/youtube/'
+      path: '/youtube'
+      fullPath: '/youtube/'
+      preLoaderRoute: typeof YoutubeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/youtube/$videoId': {
+      id: '/youtube/$videoId'
+      path: '/youtube/$videoId'
+      fullPath: '/youtube/$videoId'
+      preLoaderRoute: typeof YoutubeVideoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/watch/$type/$id': {
+      id: '/watch/$type/$id'
+      path: '/watch/$type/$id'
+      fullPath: '/watch/$type/$id'
+      preLoaderRoute: typeof WatchTypeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MoviesRoute: MoviesRoute,
+  MyListRoute: MyListRoute,
+  PeacockRoute: PeacockRoute,
+  RemoteRoute: RemoteRoute,
+  SearchRoute: SearchRoute,
+  SettingsRoute: SettingsRoute,
+  ShowsRoute: ShowsRoute,
+  MovieIdRoute: MovieIdRoute,
+  ShowIdRoute: ShowIdRoute,
+  YoutubeVideoIdRoute: YoutubeVideoIdRoute,
+  YoutubeIndexRoute: YoutubeIndexRoute,
+  WatchTypeIdRoute: WatchTypeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
