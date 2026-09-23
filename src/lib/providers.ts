@@ -28,7 +28,11 @@ export function tvEmbedUrl(
   episode: number,
   base = getProviderBase(),
 ) {
-  return `${base.replace(/\/+$/, "")}/embed/tv/${tmdbId}/${season}/${episode}`;
+  const params = new URLSearchParams({
+    s: String(season),
+    e: String(episode),
+  });
+  return `${base.replace(/\/+$/, "")}/embed/tv/${tmdbId}?${params.toString()}`;
 }
 
 export function youtubeEmbedUrl(videoId: string) {
