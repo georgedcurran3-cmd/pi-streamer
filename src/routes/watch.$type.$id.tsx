@@ -50,6 +50,14 @@ function Watch() {
   const src = isTv ? tvEmbedUrl(Number(id), s, e) : movieEmbedUrl(Number(id));
   const subtitle = isTv ? `Season ${s}, Episode ${e}${episode ? ` — ${episode.name}` : ""}` : undefined;
 
+  // CineSrc's same-site/full-page player works reliably, while its player can
+  // reject a third-party iframe even when the identical TMDB URL is valid.
+  useEffect(() => {
+    const directUrl = new URL(src);
+    directUrl.searchParams.set("back", `${window.location.origin}/${isTv ? "show" : "movie"}/${id}`);
+    window.location.replace(directUrl.toString());
+  }, [src, isTv, id]);
+
   // Tell the phone remote what's on screen, and record it for Continue Watching.
   useEffect(() => {
     if (!title?.ok) return;
