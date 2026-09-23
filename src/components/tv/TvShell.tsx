@@ -55,7 +55,7 @@ export function TvShell({ children }: { children: ReactNode }) {
         } else if (command.key === "home") {
           void navigate({ to: "/" });
         } else if (command.key === "search") {
-          void navigate({ to: "/search" });
+          void navigate({ to: "/search", search: { q: "" } });
         } else if (command.key === "menu") {
           void navigate({ to: "/settings" });
         }

@@ -26,7 +26,7 @@ export const Route = createFileRoute("/youtube/")({
 
 function YouTubePage() {
   const { q } = Route.useSearch();
-  const navigate = useNavigate({ from: "/youtube" });
+  const navigate = useNavigate({ from: "/youtube/" });
   const [value, setValue] = useState(q);
 
   useEffect(() => setValue(q), [q]);

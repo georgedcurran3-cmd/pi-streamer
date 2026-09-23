@@ -52,7 +52,7 @@ function Watch() {
     setTvStatus({
       nowPlaying: {
         title: title.title,
-        subtitle,
+        ...(subtitle ? { subtitle } : {}),
         artwork: title.poster,
         playing: true,
         position: 0,
