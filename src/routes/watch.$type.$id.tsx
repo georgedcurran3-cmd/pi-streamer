@@ -29,6 +29,8 @@ function Watch() {
   const { s, e } = Route.useSearch();
   const navigate = useNavigate();
   const [chromeVisible, setChromeVisible] = useState(true);
+  const [attempt, setAttempt] = useState(0);
+  const [stalled, setStalled] = useState(false);
   const isTv = type === "tv";
 
   const { data: title } = useQuery({
@@ -95,6 +97,13 @@ function Watch() {
     };
   }, []);
 
+  // If nothing has started after a while, offer a retry instead of a black screen.
+  useEffect(() => {
+    setStalled(false);
+    const timer = window.setTimeout(() => setStalled(true), 30000);
+    return () => window.clearTimeout(timer);
+  }, [src, attempt]);
+
   const nextEpisode = () => {
     void navigate({ to: "/watch/$type/$id", params: { type, id }, search: { s, e: e + 1 } });
   };
@@ -102,7 +111,7 @@ function Watch() {
   return (
     <div className="relative h-screen w-screen bg-black">
       <iframe
-        key={src}
+        key={`${src}#${attempt}`}
         title={title?.title ?? "Playback"}
         src={src}
         allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
@@ -110,6 +119,35 @@ function Watch() {
         referrerPolicy="origin"
         className="h-full w-full border-0"
       />
+
+      {stalled ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-8">
+          <div className="glass-panel pointer-events-auto max-w-lg rounded-2xl px-6 py-5 text-center">
+            <p className="text-sm font-semibold">Still looking for this one</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              Very new releases sometimes have no playable copy yet. Try again in a moment, or pick
+              something else.
+            </p>
+            <div className="mt-4 flex justify-center gap-3">
+              <button
+                onClick={() => {
+                  setStalled(false);
+                  setAttempt((value) => value + 1);
+                }}
+                className="tvf rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground"
+              >
+                Try again
+              </button>
+              <button
+                onClick={() => window.history.back()}
+                className="tvf rounded-full bg-secondary px-6 py-2.5 text-sm font-semibold"
+              >
+                Go back
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <div
         className={`pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-6 transition-opacity duration-300 ${
