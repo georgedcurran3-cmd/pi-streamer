@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowLeft, SkipForward } from "lucide-react";
+import { ArrowLeft, ExternalLink, SkipForward } from "lucide-react";
 import { getSeason, getTitle } from "@/lib/tmdb.functions";
 import { movieEmbedUrl, tvEmbedUrl } from "@/lib/providers";
 import { readPairCode } from "@/lib/device";
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/watch/$type/$id")({
       { name: "description", content: "Full-screen playback on your Curran TV media centre." },
       { property: "og:title", content: "Now Playing — Curran TV" },
       { property: "og:description", content: "Full-screen playback on your Curran TV media centre." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Watch,
@@ -108,6 +110,12 @@ function Watch() {
     void navigate({ to: "/watch/$type/$id", params: { type, id }, search: { s, e: e + 1 } });
   };
 
+  const openDirectPlayer = () => {
+    const directUrl = new URL(src);
+    directUrl.searchParams.set("back", window.location.href);
+    window.location.assign(directUrl.toString());
+  };
+
   return (
     <div className="relative h-screen w-screen bg-black">
       <iframe
@@ -125,10 +133,16 @@ function Watch() {
           <div className="glass-panel pointer-events-auto max-w-lg rounded-2xl px-6 py-5 text-center">
             <p className="text-sm font-semibold">Still looking for this one</p>
             <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              Very new releases sometimes have no playable copy yet. Try again in a moment, or pick
-              something else.
+              The embedded player did not start. Open CineSrc directly to use the same mode as its
+              homepage, or try again here.
             </p>
             <div className="mt-4 flex justify-center gap-3">
+              <button
+                onClick={openDirectPlayer}
+                className="tvf inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground"
+              >
+                <ExternalLink className="size-4" /> Open directly
+              </button>
               <button
                 onClick={() => {
                   setStalled(false);
@@ -164,6 +178,12 @@ function Watch() {
         <div className="pointer-events-none max-w-md rounded-2xl glass-panel px-5 py-3 text-right">
           <p className="text-sm font-semibold">{title?.title ?? "Loading…"}</p>
           {subtitle ? <p className="text-xs text-muted-foreground">{subtitle}</p> : null}
+          <button
+            onClick={openDirectPlayer}
+            className="tvf pointer-events-auto mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
+          >
+            <ExternalLink className="size-3.5" /> Open directly
+          </button>
         </div>
       </div>
 
