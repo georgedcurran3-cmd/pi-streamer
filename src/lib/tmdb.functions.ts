@@ -255,6 +255,15 @@ export const getTitle = createServerFn({ method: "GET" })
     }
   });
 
+export type Episode = {
+  number: number;
+  name: string;
+  overview: string;
+  still: string | null;
+  air: string;
+  runtime: number;
+};
+
 export const getSeason = createServerFn({ method: "GET" })
   .inputValidator((input: { id: number; season: number }) => input)
   .handler(async ({ data }) => {
@@ -270,21 +279,14 @@ export const getSeason = createServerFn({ method: "GET" })
           still: img(e.still_path, "w300"),
           air: (e.air_date ?? "") as string,
           runtime: (e.runtime ?? 0) as number,
-        })),
+        })) as Episode[],
       };
     } catch (error) {
       return {
         ok: false as const,
         reason: error instanceof Error ? error.message : "TMDB_ERROR",
         name: "",
-        episodes: [] as {
-          number: number;
-          name: string;
-          overview: string;
-          still: string | null;
-          air: string;
-          runtime: number;
-        }[],
+        episodes: [] as Episode[],
       };
     }
   });
