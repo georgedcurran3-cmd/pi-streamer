@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Curran h264ify",
+  "version": "1.0",
+  "description": "Forces H.264 video up to 720p so the Pi's video chip does the decoding.",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["inject.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    }
+  ]
+}

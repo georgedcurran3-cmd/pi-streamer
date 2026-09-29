@@ -1,10 +1,9 @@
 [Unit]
-Description=Curran TV auto-update from GitHub
+Description=Curran TV auto-update from GitHub releases
 After=network-online.target
 
 [Service]
 Type=oneshot
 User=__USER__
-WorkingDirectory=__APP_DIR__
-EnvironmentFile=__APP_DIR__/.env
-ExecStart=/bin/bash __APP_DIR__/deploy/update.sh
+EnvironmentFile=__BASE__/shared/.env
+ExecStart=/bin/bash __BASE__/current/deploy/update.sh

@@ -45,6 +45,7 @@ export function readLiteMode(): boolean {
   const stored = localStorage.getItem(LITE_KEY);
   if (stored !== null) return stored === "true";
   // Default on for low-powered devices such as the Raspberry Pi.
+  if (/aarch64|armv7|armv8|Raspbian/i.test(navigator.userAgent)) return true;
   const cores = navigator.hardwareConcurrency ?? 4;
   return cores <= 4;
 }

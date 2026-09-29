@@ -1,50 +1,41 @@
 #!/usr/bin/env bash
-# Curran TV — pull the latest version from GitHub, build it, restart, verify.
-# Rolls back automatically if the new version fails to build or start.
-# The Pi always initiates the connection; nothing connects inward.
+# Curran TV — fetch the latest prebuilt pack, swap it in, verify, roll back on failure.
+# Keeps only the current and previous versions. Never touches shared/.env.
 set -uo pipefail
 
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-LOG="$APP_DIR/deploy/update.log"
-BRANCH="${CURRAN_BRANCH:-main}"
+BASE=/opt/curran-tv
+LOG="$BASE/shared/update.log"
+REPO="${CURRAN_REPO:-georgedcurran3-cmd/pi-streamer}"
+URL="https://github.com/$REPO/releases/download/latest"
+log() { echo "[$(date -Is)] $*" >> "$LOG"; }
 
-log() { echo "[$(date -Is)] $*" | tee -a "$LOG"; }
+NEW="$(curl -fsSL "$URL/VERSION" 2>/dev/null | tr -d '[:space:]')" || exit 0
+[ -n "$NEW" ] || exit 0
+OLD="$(basename "$(readlink -f "$BASE/current")")"
+[ "$NEW" = "$OLD" ] && exit 0
 
-cd "$APP_DIR"
+log "update ${OLD:0:7} -> ${NEW:0:7}"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+curl -fsSL "$URL/curran-tv.tar.gz" -o "$TMP/app.tgz" || { log "download failed"; exit 0; }
+mkdir -p "$BASE/releases/$NEW"
+tar -xzf "$TMP/app.tgz" -C "$BASE/releases/$NEW" || { log "bad pack"; rm -rf "$BASE/releases/$NEW"; exit 0; }
 
-# .env and local data are never touched by git.
-git fetch --quiet origin "$BRANCH" || { log "fetch failed (offline?)"; exit 0; }
-
-LOCAL="$(git rev-parse HEAD)"
-REMOTE="$(git rev-parse "origin/$BRANCH")"
-if [ "$LOCAL" = "$REMOTE" ]; then
-  exit 0
-fi
-
-log "update found: ${LOCAL:0:7} -> ${REMOTE:0:7}"
-git reset --hard "origin/$BRANCH" >>"$LOG" 2>&1
-
-rollback() {
-  log "FAILED — rolling back to ${LOCAL:0:7}"
-  git reset --hard "$LOCAL" >>"$LOG" 2>&1
-  npm install >>"$LOG" 2>&1
-  npm run build >>"$LOG" 2>&1
-  sudo systemctl restart curran-tv.service
-  exit 1
-}
-
-npm install >>"$LOG" 2>&1 || rollback
-npm run build >>"$LOG" 2>&1 || rollback
-
+ln -sfn "$BASE/releases/$NEW" "$BASE/current"
 sudo systemctl restart curran-tv.service
 
-# Verify the app answers before calling the update good.
 for _ in $(seq 1 30); do
-  if curl -fsS -o /dev/null "http://localhost:${PORT:-3000}/"; then
-    log "updated to ${REMOTE:0:7} and healthy"
+  if curl -fsS -o /dev/null "http://localhost:3000/"; then
+    log "healthy on ${NEW:0:7}"
+    # Prune: keep current + previous only.
+    ls -1t "$BASE/releases" | grep -vx -e "$NEW" -e "$OLD" | while read -r d; do rm -rf "$BASE/releases/$d"; done
     exit 0
   fi
   sleep 2
 done
 
-rollback
+log "FAILED — rolling back to ${OLD:0:7}"
+ln -sfn "$BASE/releases/$OLD" "$BASE/current"
+rm -rf "$BASE/releases/$NEW"
+sudo systemctl restart curran-tv.service
+exit 1

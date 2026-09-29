@@ -6,12 +6,14 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=__USER__
-WorkingDirectory=__APP_DIR__
-EnvironmentFile=__APP_DIR__/.env
-ExecStart=/usr/bin/npm run start
+WorkingDirectory=__BASE__/current
+EnvironmentFile=__BASE__/shared/.env
+ExecStart=/usr/bin/node --max-old-space-size=128 __BASE__/current/.output/server/index.mjs
 Restart=always
 RestartSec=5
-MemoryMax=420M
+MemoryMax=220M
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
