@@ -1,32 +1,34 @@
 #!/usr/bin/env bash
-# Launches Chromium full screen on the TV, tuned for a Raspberry Pi 3B.
+# Full-screen Chromium on labwc/Wayland, tuned for a Pi 3B.
 set -u
+URL="http://localhost:3000/"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROFILE="$HOME/.config/curran-kiosk"   # keeps the YouTube sign-in
+CACHE=/tmp/chromium-cache              # RAM, wiped on boot
+BIN="$(command -v chromium || command -v chromium-browser)"
 
-URL="http://localhost:${PORT:-3000}/"
-PROFILE="$HOME/.config/curran-kiosk"
+for _ in $(seq 1 60); do curl -fsS -o /dev/null "$URL" && break; sleep 2; done
 
-export DISPLAY=:0
-xset s off -dpms s noblank 2>/dev/null || true
-unclutter -idle 0.5 -root &
+# Stop "restore pages?" bubbles after a power cut.
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]*"/"exit_type":"Normal"/' \
+  "$PROFILE/Default/Preferences" 2>/dev/null || true
 
-# Wait for the app to answer.
-for _ in $(seq 1 60); do
-  curl -fsS -o /dev/null "$URL" && break
-  sleep 2
-done
-
-# The profile persists the YouTube sign-in between reboots.
-exec chromium-browser \
+exec "$BIN" \
   --kiosk "$URL" \
+  --ozone-platform=wayland \
   --user-data-dir="$PROFILE" \
-  --start-fullscreen \
-  --noerrdialogs \
-  --disable-infobars \
-  --disable-session-crashed-bubble \
-  --disable-features=TranslateUI \
-  --autoplay-policy=no-user-gesture-required \
-  --enable-gpu-rasterization \
+  --disk-cache-dir="$CACHE" \
+  --disk-cache-size=104857600 \
+  --media-cache-size=52428800 \
+  --load-extension="$DIR/h264ify" \
+  --enable-features=VaapiVideoDecoder,VaapiVideoDecodeLinuxGL \
   --ignore-gpu-blocklist \
-  --disable-software-rasterizer \
+  --enable-gpu-rasterization \
+  --autoplay-policy=no-user-gesture-required \
   --renderer-process-limit=2 \
-  --check-for-update-interval=604800
+  --disable-background-networking \
+  --disable-component-update \
+  --disable-sync \
+  --disable-features=TranslateUI,MediaRouter,OptimizationHints \
+  --noerrdialogs --disable-infobars --no-first-run \
+  --password-store=basic

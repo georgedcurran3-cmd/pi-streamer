@@ -1,0 +1,39 @@
+# Builds the app on GitHub (not on the Pi) and publishes a small ready-to-run pack.
+name: Build Pi release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NITRO_PRESET: node-server
+      VITE_SUPABASE_URL: https://xlhtrdrbxfwvhhfmuzgl.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ypdSwJvQWpm5mBTo80BTBw_DAGCOr9C
+      VITE_SUPABASE_PROJECT_ID: xlhtrdrbxfwvhhfmuzgl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Pack
+        run: |
+          test -f .output/server/index.mjs
+          mkdir -p pack/deploy
+          cp -r .output pack/.output
+          cp -r deploy/. pack/deploy/
+          echo "$GITHUB_SHA" > pack/VERSION
+          tar -czf curran-tv.tar.gz -C pack .
+          echo "$GITHUB_SHA" > VERSION
+          du -h curran-tv.tar.gz
+      - name: Publish rolling release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest curran-tv.tar.gz VERSION --title "Latest Pi build" --notes "Built from $GITHUB_SHA"
