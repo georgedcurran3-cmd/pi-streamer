@@ -14,47 +14,40 @@ remote that controls everything.
 - **Everything else** — titles come from the film database, matched by ID and
   opened on the configured source.
 
-## Put it on the Pi
+## Put it on the Pi (lightweight — nothing is built on the Pi)
 
-1. Create a repository on GitHub and push this project to it.
-2. On the Pi:
+GitHub builds the app on every push to `main` and publishes a small pack
+(Actions tab → "Build Pi release"). The repo must be public. On the Pi:
 
-   ```bash
-   git clone https://github.com/<you>/<repo>.git ~/curran-tv
-   cd ~/curran-tv
-   bash deploy/install.sh
-   nano .env        # add your keys
-   sudo systemctl restart curran-tv
-   ```
+```bash
+curl -fsSL https://raw.githubusercontent.com/georgedcurran3-cmd/pi-streamer/main/deploy/install.sh | bash
+sudo reboot
+```
 
-3. The Pi reboots straight into full-screen Curran TV.
+The installer asks for your TMDB key once and stores it in
+`/opt/curran-tv/shared/.env`. Total footprint is roughly 250 MB including Node.js.
 
-## Keys
+## Storage & smoothness
 
-Copy `.env.example` to `.env` and fill it in. `TMDB_API_KEY` is required and
-free. `YOUTUBE_API_KEY` is optional — without it, YouTube search inside the app
-is off but full YouTube still works.
-
-Keys live only on the Pi and only on the server side. They are never sent to the
-browser and `.env` is never committed.
+- Only the current and previous versions are kept (for rollback).
+- System logs live in memory (50 MB cap); the update log is capped at 1 MB.
+- Browser cache lives in `/tmp` (RAM), capped at 100 MB, wiped each boot.
+- Swap uses compressed RAM (zram) instead of the SD card.
+- A built-in extension forces H.264 video up to 720p so the Pi's video chip
+  decodes it instead of the CPU. Graphics memory set to 128 MB.
 
 ## Updates
 
-Every 5 minutes the Pi checks GitHub for new commits, installs, builds,
-restarts and checks the app answers. If anything fails it rolls straight back to
-the previous version. Your `.env` is never overwritten. Push to `main` and the
-TV updates itself. The Pi always makes the connection outward — nothing needs to
-reach into your home network.
-
-Update history: `deploy/update.log`.
+Every 5 minutes the Pi checks for a new pack, swaps it in, restarts, health-checks
+and rolls back on failure. `.env` is never touched. Log: `/opt/curran-tv/shared/update.log`.
 
 ## Handy commands
 
 ```bash
-sudo systemctl status curran-tv      # is the app running?
-sudo systemctl restart curran-kiosk  # restart the screen
-sudo journalctl -u curran-tv -f      # live logs
-bash deploy/update.sh                # update right now
+sudo systemctl status curran-tv                    # is the app running?
+sudo journalctl -u curran-tv -f                    # live logs
+bash /opt/curran-tv/current/deploy/update.sh       # update right now
+du -sh /opt/curran-tv                              # space used
 ```
 
 ## Sign in to YouTube once
